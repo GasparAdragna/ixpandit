@@ -1,11 +1,14 @@
 <template>
   <div class="home">
-    <h1>Hola</h1>
+    <v-row>
+      <v-col> </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Home"
+  name: "Home",
+  created: function() {}
 };
 </script>
