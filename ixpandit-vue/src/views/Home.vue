@@ -22,6 +22,8 @@
         <v-col
           cols="12"
           lg="3"
+          md="4"
+          sm="6"
           v-for="(pokemon, index) in filteredPokemons"
           :key="index"
         >

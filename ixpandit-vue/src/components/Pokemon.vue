@@ -52,13 +52,13 @@
               </v-chip-group>
             </v-card-text>
             <v-card-title>Evolves to</v-card-title>
-            <v-card-text class="pb-0">
+            <v-card-text class="pb-0" v-if="evolutions != null">
               <v-chip-group
                 active-class="deep-purple accent-4 white--text"
                 column
               >
                 <v-chip>{{
-                  capitalizedName(evolutions.chain.species.name)
+                  capitalizedName(evolutions.chain.evolves_to[0].species.name)
                 }}</v-chip>
               </v-chip-group>
             </v-card-text>
@@ -95,7 +95,8 @@ export default {
     return {
       dialog: false,
       pokemonDetails: {},
-      evolutions: {}
+      evolutions: null,
+      species: null
     };
   },
   props: {
@@ -115,27 +116,30 @@ export default {
         );
         this.pokemonDetails = response.data;
         try {
-          const evolutions = await axios.get(
-            "https://pokeapi.co/api/v2/evolution-chain/" +
-              this.pokemonDetails.id
-          );
-          this.evolutions = evolutions.data;
+          const response = await axios.get(this.pokemonDetails.species.url);
+          this.species = response.data;
+          try {
+            const evolutions = await axios.get(
+              this.species.evolution_chain.url
+            );
+            this.evolutions = evolutions.data;
+          } catch (e) {
+            this.error();
+          }
         } catch (e) {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Something went wrong while trying learn more from Pokemon",
-            footer: "Please refresh the page and try again"
-          });
+          this.error();
         }
       } catch (e) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong while trying learn more from Pokemon",
-          footer: "Please refresh the page and try again"
-        });
+        this.error();
       }
+    },
+    error() {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong while trying learn more from Pokemon",
+        footer: "Please refresh the page and try again"
+      });
     }
   }
 };
