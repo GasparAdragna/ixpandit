@@ -1,6 +1,6 @@
 # Gaspar Adragna - Vue Submission for Ixpandit
 
-![alt text](https://www.ixpandit.com/wp-content/uploads/2018/11/lk-copia.png)
+![alt text](https://beta.ixpandit.com/wp-content/uploads/2018/11/logo-cambiar.png)
 
 
 This is my submission for the required challenge.
