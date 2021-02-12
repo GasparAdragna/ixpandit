@@ -1,7 +1,6 @@
 # Gaspar Adragna - Vue Submission for Ixpandit
 
-![alt text](https://beta.ixpandit.com/wp-content/uploads/2018/11/logo-cambiar.png)
-
+<img src="https://beta.ixpandit.com/wp-content/uploads/2018/11/logo-cambiar.png" alt="drawing" width="200"/>
 
 This is my submission for the required challenge.
 The page loads pokemons and as the user requests more it adds them automatically to the end of the page. It handles authorization and its responsive for all devices.
