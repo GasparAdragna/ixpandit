@@ -3,7 +3,7 @@
     <v-card class="mx-auto">
       <v-card-text>
         <p class="display-1 text--primary mb-0">
-          {{ capitalizedName }}
+          {{ capitalizedName(name) }}
         </p>
       </v-card-text>
       <v-card-actions>
@@ -32,7 +32,9 @@
           >
             <v-img :src="pokemonDetails.sprites.front_default"></v-img>
 
-            <v-card-title class="text-h2">{{ capitalizedName }}</v-card-title>
+            <v-card-title class="text-h2">{{
+              capitalizedName(name)
+            }}</v-card-title>
 
             <v-divider class="mx-4"></v-divider>
             <!-- Tipo de Pokemon -->
@@ -45,8 +47,19 @@
                 <v-chip
                   v-for="(type, index) in pokemonDetails.types"
                   :key="index"
-                  >{{ type.type.name }}</v-chip
+                  >{{ capitalizedName(type.type.name) }}</v-chip
                 >
+              </v-chip-group>
+            </v-card-text>
+            <v-card-title>Evolves to</v-card-title>
+            <v-card-text class="pb-0">
+              <v-chip-group
+                active-class="deep-purple accent-4 white--text"
+                column
+              >
+                <v-chip>{{
+                  capitalizedName(evolutions.chain.species.name)
+                }}</v-chip>
               </v-chip-group>
             </v-card-text>
             <!-- Movimientos -->
@@ -59,7 +72,7 @@
                 <v-chip
                   v-for="(move, index) in pokemonDetails.moves"
                   :key="index"
-                  >{{ move.move.name }}</v-chip
+                  >{{ capitalizedName(move.move.name) }}</v-chip
                 >
               </v-chip-group>
             </v-card-text>
@@ -81,7 +94,8 @@ export default {
   data() {
     return {
       dialog: false,
-      pokemonDetails: {}
+      pokemonDetails: {},
+      evolutions: {}
     };
   },
   props: {
@@ -90,18 +104,30 @@ export default {
       required: true
     }
   },
-  computed: {
-    capitalizedName() {
-      return this.name.charAt(0).toUpperCase() + this.name.slice(1);
-    }
-  },
   methods: {
+    capitalizedName(name) {
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    },
     async showInfo() {
       try {
         const response = await axios.get(
           "https://pokeapi.co/api/v2/pokemon/" + this.name
         );
         this.pokemonDetails = response.data;
+        try {
+          const evolutions = await axios.get(
+            "https://pokeapi.co/api/v2/evolution-chain/" +
+              this.pokemonDetails.id
+          );
+          this.evolutions = evolutions.data;
+        } catch (e) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong while trying learn more from Pokemon",
+            footer: "Please refresh the page and try again"
+          });
+        }
       } catch (e) {
         Swal.fire({
           icon: "error",
